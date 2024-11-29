@@ -29,7 +29,7 @@ export default {
 }
 
 #app {
-  background-color: #444;
+  background-color: #7c7a7a;
   width: 100%;
   min-height: 100vh;  /* Asegura que el contenedor ocupe al menos toda la altura de la pantalla */
 }
