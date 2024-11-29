@@ -17,7 +17,7 @@
   </template>
   
   <script>
-  import { mapActions } from 'vuex';
+  import axios from 'axios';
   
   export default {
     name: 'RegisterComponent',
@@ -28,17 +28,24 @@
       };
     },
     methods: {
-      ...mapActions('auth', ['register']),
-      async register() {
-        try {
-          await this.register({ email: this.email, password: this.password });
-          alert('Registro exitoso. Ahora puedes iniciar sesión.');
-          this.$router.push('/login');
-        } catch (error) {
-          alert('Error al registrar. Intenta nuevamente.');
-        }
-      },
-    },
+  async register() {
+    try {
+      const response = await axios.post('http://localhost:5000/api/auth/register', {
+        email: this.email,
+        password: this.password,
+      });
+
+      alert('Registro exitoso. Ahora puedes iniciar sesión.');
+      console.log('Respuesta del servidor:', response.data); // Depuración
+      this.$router.push('/login');
+    } catch (error) {
+      console.error('Error al registrar:', error.response?.data || error.message); // Depuración
+      alert('Error al registrar. Intenta nuevamente.');
+    }
+  },
+},
+
+
   };
   </script>
   

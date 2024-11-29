@@ -18,9 +18,11 @@ exports.registerUser = async (req, res) => {
     await user.save();
     res.status(201).json({ message: 'Usuario registrado con éxito' });
   } catch (error) {
+    console.error('Error al registrar usuario:', error.message);
     res.status(500).json({ message: 'Error al registrar el usuario', error: error.message });
   }
 };
+
 
 // Iniciar sesión
 exports.loginUser = async (req, res) => {

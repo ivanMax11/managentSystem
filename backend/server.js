@@ -10,8 +10,11 @@ connectDB();
 
 // Middleware
 app.use(cors({
-    origin: ['http://localhost:5000', 'https://managentsystem.onrender.com', 'https://managentsystem-1.onrender.com']
-}));
+    origin: ['http://localhost:5173', 'https://managentsystem.onrender.com', 'https://managentsystem-1.onrender.com'],
+    methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
+    allowedHeaders: ['Content-Type', 'Authorization']
+  }));
+  
 app.use(express.json());
 
 // Importar las rutas personalizadas
