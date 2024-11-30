@@ -69,10 +69,11 @@ export default {
   created() {
     this.cargarVentas(); // Cargar ventas al inicio si ya hay datos predefinidos de fecha
   },
+  
   methods: {
     async cargarVentas() {
       const apiUrl = process.env.VUE_APP_API_URL;
-      
+
       try {
         const response = await axios.get(`${apiUrl}/api/ventas/ventas`, {
           params: {

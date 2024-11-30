@@ -56,12 +56,13 @@ export default {
       password: '',
     };
   },
+  
   methods: {
     ...mapActions(['login']),
     async login() {
 
     const apiUrl = process.env.VUE_APP_API_URL;
-    
+
   try {
    
     const response = await fetch(`${apiUrl}/api/auth/login`, {

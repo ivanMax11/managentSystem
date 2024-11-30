@@ -72,6 +72,7 @@ export default {
   methods: {
     async handleSubmit() {
     const apiUrl = process.env.VUE_APP_API_URL; 
+    
   try {
     // Enviar la solicitud POST
     const response = await axios.post(`${apiUrl}/api/inventario`, this.formData);

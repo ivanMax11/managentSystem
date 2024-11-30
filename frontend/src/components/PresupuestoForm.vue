@@ -192,7 +192,6 @@ export default {
     },
   },
   created() {
-  // Usar la variable de entorno para la URL de la API
   const apiUrl = process.env.VUE_APP_API_URL; // Asegúrate de tener la variable de entorno configurada
 
   // Cargar los productos disponibles

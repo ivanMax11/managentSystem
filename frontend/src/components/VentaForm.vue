@@ -140,7 +140,6 @@ export default {
   created() {
     this.cargarProductos();
   },
-
   methods: {
     async cargarProductos() {
 

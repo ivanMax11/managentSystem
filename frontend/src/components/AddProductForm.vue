@@ -140,6 +140,7 @@ export default {
       proveedorDireccion: this.proveedorDireccion,
     };
 
+    
     const apiUrl = process.env.VUE_APP_API_URL; 
 
     // Realizar la solicitud POST para añadir el producto

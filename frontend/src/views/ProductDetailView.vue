@@ -39,10 +39,11 @@
         product: null
       };
     },
+    
     methods: {
       async loadProduct() {
   const productId = this.$route.params.id;
-  
+
   const apiUrl = process.env.VUE_APP_API_URL; 
 
   try {

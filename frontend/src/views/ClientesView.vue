@@ -34,6 +34,7 @@
     created() {
       this.cargarClientes();
     },
+    
     methods: {
       async cargarClientes() {
         const apiUrl = process.env.VUE_APP_API_URL;
