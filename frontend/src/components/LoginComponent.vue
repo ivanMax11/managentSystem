@@ -59,24 +59,29 @@ export default {
   methods: {
     ...mapActions(['login']),
     async login() {
-      try {
-        const response = await fetch('http://localhost:5000/api/auth/login', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ email: this.email, password: this.password }),
-        });
-        const data = await response.json();
 
-        if (response.ok) {
-          this.$store.dispatch('login', data.token); // Guarda el token
-          this.$router.push({ name: 'Dashboard' }); // Redirige al dashboard
-        } else {
-          alert(data.message || 'Error al iniciar sesión');
-        }
-      } catch (error) {
-        alert('Error al conectarse al servidor');
-      }
-    },
+    const apiUrl = process.env.VUE_APP_API_URL;
+    
+  try {
+   
+    const response = await fetch(`${apiUrl}/api/auth/login`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ email: this.email, password: this.password }),
+    });
+    const data = await response.json();
+
+    if (response.ok) {
+      // Guarda el token en el store
+      this.$store.dispatch('login', data.token);
+      this.$router.push({ name: 'Dashboard' }); // Redirige al dashboard
+    } else {
+      alert(data.message || 'Error al iniciar sesión');
+    }
+  } catch (error) {
+    alert('Error al conectarse al servidor');
+  }
+},
   },
 };
 </script>

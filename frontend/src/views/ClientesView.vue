@@ -36,8 +36,10 @@
     },
     methods: {
       async cargarClientes() {
-        try {
-          const response = await axios.get('http://localhost:5000/api/clientes');
+        const apiUrl = process.env.VUE_APP_API_URL;
+
+        try {       
+          const response = await axios.get(`${apiUrl}api/clientes`);
           this.clientes = response.data;
         } catch (error) {
           alert('Error al cargar la lista de clientes');

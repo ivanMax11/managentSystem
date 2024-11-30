@@ -41,14 +41,18 @@
     },
     methods: {
       async loadProduct() {
-        const productId = this.$route.params.id;
-        try {
-          const response = await axios.get(`/api/products/${productId}`);
-          this.product = response.data;
-        } catch (error) {
-          console.error('Error al cargar el producto:', error);
-        }
-      }
+  const productId = this.$route.params.id;
+  
+  const apiUrl = process.env.VUE_APP_API_URL; 
+
+  try {
+    const response = await axios.get(`${apiUrl}/api/products/${productId}`); // Usar la URL dinámica
+    this.product = response.data;
+  } catch (error) {
+    console.error('Error al cargar el producto:', error);
+  }
+}
+
     },
     mounted() {
       this.loadProduct();

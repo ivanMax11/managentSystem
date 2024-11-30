@@ -38,8 +38,9 @@
     },
     methods: {
       async obtenerProveedores() {
+        const apiUrl = process.env.VUE_APP_API_URL; 
         try {
-          const response = await axios.get('http://localhost:5000/api/proveedores'); // Asegúrate de que esta ruta sea la correcta
+          const response = await axios.get(`${apiUrl}api/proveedores`); // Asegúrate de que esta ruta sea la correcta
           this.proveedores = response.data;
         } catch (error) {
           console.error('Error al obtener proveedores:', error);
@@ -50,8 +51,11 @@
         console.log(proveedor);
       },
       async eliminarProveedor(id) {
+       
+        const apiUrl = process.env.VUE_APP_API_URL;
+        
         try {
-          await axios.delete(`http://localhost:5000/api/proveedores/${id}`); // Ruta para eliminar proveedor
+          await axios.delete(`${apiUrl}/api/proveedores/${id}`); // Ruta para eliminar proveedor
           this.obtenerProveedores(); // Actualizamos la lista de proveedores
         } catch (error) {
           console.error('Error al eliminar proveedor:', error);

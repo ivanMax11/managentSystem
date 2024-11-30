@@ -71,18 +71,19 @@ export default {
   },
   methods: {
     async handleSubmit() {
-      try {
-        const response = await axios.post(
-          "http://localhost:5000/api/inventario",
-          this.formData
-        );
-        alert("Artículo añadido con éxito");
-        this.resetForm();
-      } catch (error) {
-        console.error("Error al añadir el artículo", error);
-        alert("Hubo un error al añadir el artículo");
-      }
-    },
+    const apiUrl = process.env.VUE_APP_API_URL; 
+  try {
+    // Enviar la solicitud POST
+    const response = await axios.post(`${apiUrl}/api/inventario`, this.formData);
+
+    alert("Artículo añadido con éxito");
+    this.resetForm(); // Si tienes una función para reiniciar el formulario
+  } catch (error) {
+    console.error("Error al añadir el artículo", error);
+    alert("Hubo un error al añadir el artículo");
+  }
+},
+
     resetForm() {
       this.formData = {
         nombre: "",

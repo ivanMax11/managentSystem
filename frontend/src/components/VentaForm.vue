@@ -143,8 +143,11 @@ export default {
 
   methods: {
     async cargarProductos() {
-      try {
-        const response = await axios.get('http://localhost:5000/api/stock/stock');
+
+      const apiUrl = process.env.VUE_APP_API_URL;
+
+      try {    
+        const response = await axios.get(`${apiUrl}/api/stock/stock`);
         this.productos = response.data;
       } catch (error) {
         this.mostrarMensaje('Error al cargar los productos', 'danger');
@@ -198,7 +201,9 @@ export default {
 
 
     console.log('Datos enviados al backend:', ventaData); // Depuración
-    const response = await axios.post('http://localhost:5000/api/ventas/venta', ventaData);
+    const apiUrl = process.env.VUE_APP_API_URL;
+
+    const response = await axios.post(`${apiUrl}/api/ventas/venta`, ventaData);
 
     if (response.status === 201) {
       this.mostrarMensaje('Venta registrada con éxito', 'success');

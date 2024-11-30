@@ -28,22 +28,26 @@
       };
     },
     methods: {
-  async register() {
-    try {
-      const response = await axios.post('http://localhost:5000/api/auth/register', {
-        email: this.email,
-        password: this.password,
-      });
+      async register() {
 
-      alert('Registro exitoso. Ahora puedes iniciar sesión.');
-      console.log('Respuesta del servidor:', response.data); // Depuración
-      this.$router.push('/login');
-    } catch (error) {
-      console.error('Error al registrar:', error.response?.data || error.message); // Depuración
-      alert('Error al registrar. Intenta nuevamente.');
-    }
-  },
+    const apiUrl = process.env.VUE_APP_API_URL;
+
+  try {
+   
+    const response = await axios.post(`${apiUrl}/api/auth/register`, {
+      email: this.email,
+      password: this.password,
+    });
+
+    alert('Registro exitoso. Ahora puedes iniciar sesión.');
+    console.log('Respuesta del servidor:', response.data); // Depuración
+    this.$router.push('/login');
+  } catch (error) {
+    console.error('Error al registrar:', error.response?.data || error.message); // Depuración
+    alert('Error al registrar. Intenta nuevamente.');
+  }
 },
+    },
 
 
   };

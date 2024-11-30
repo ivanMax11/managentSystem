@@ -87,8 +87,10 @@ export default {
     const additionalQuantity = ref(0);
 
     const loadProducts = async () => {
+      const apiUrl = process.env.VUE_APP_API_URL;
+      
       try {
-        const response = await axios.get('http://localhost:5000/api/stock/stock');
+        const response = await axios.get(`${apiUrl}/api/stock/stock`);
         products.value = response.data;
       } catch (error) {
         console.error('Error al cargar los productos:', error);

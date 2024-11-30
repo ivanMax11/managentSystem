@@ -127,26 +127,33 @@ export default {
   },
   methods: {
     async addProduct() {
-      try {
-        const productData = {
-          nombre: this.nombre,
-          categoria: this.categoria,
-          precio: this.precio,
-          cantidad: this.cantidad,
-          proveedorNombre: this.proveedorNombre,
-          proveedorCuit: this.proveedorCuit,
-          proveedorTelefono: this.proveedorTelefono,
-          proveedorDireccion: this.proveedorDireccion,
-        };
+  try {
+    // Crear los datos del producto
+    const productData = {
+      nombre: this.nombre,
+      categoria: this.categoria,
+      precio: this.precio,
+      cantidad: this.cantidad,
+      proveedorNombre: this.proveedorNombre,
+      proveedorCuit: this.proveedorCuit,
+      proveedorTelefono: this.proveedorTelefono,
+      proveedorDireccion: this.proveedorDireccion,
+    };
 
-        await axios.post("http://localhost:5000/api/stock/product", productData);
-        alert("Producto añadido exitosamente");
-        this.resetForm();
-      } catch (error) {
-        console.error("Error al añadir producto:", error);
-        alert("Hubo un error al añadir el producto");
-      }
-    },
+    const apiUrl = process.env.VUE_APP_API_URL; 
+
+    // Realizar la solicitud POST para añadir el producto
+    await axios.post(`${apiUrl}/api/stock/product`, productData);
+
+    // Si todo sale bien
+    alert("Producto añadido exitosamente");
+    this.resetForm(); // Reiniciar el formulario si es necesario
+  } catch (error) {
+    console.error("Error al añadir producto:", error);
+    alert("Hubo un error al añadir el producto");
+  }
+},
+
     resetForm() {
       this.nombre = "";
       this.categoria = "";

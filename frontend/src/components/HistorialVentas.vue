@@ -71,8 +71,10 @@ export default {
   },
   methods: {
     async cargarVentas() {
+      const apiUrl = process.env.VUE_APP_API_URL;
+      
       try {
-        const response = await axios.get('http://localhost:5000/api/ventas/ventas', {
+        const response = await axios.get(`${apiUrl}/api/ventas/ventas`, {
           params: {
             startDate: this.fechaInicio,
             endDate: this.fechaFin,

@@ -192,16 +192,19 @@ export default {
     },
   },
   created() {
-    // Cargar los productos disponibles
-    axios
-      .get("http://localhost:5000/api/stock/stock")
-      .then((response) => {
-        this.productos = response.data;
-      })
-      .catch((error) => {
-        console.error("Error al cargar los productos:", error);
-        alert("Hubo un problema al cargar los productos");
-      });
+  // Usar la variable de entorno para la URL de la API
+  const apiUrl = process.env.VUE_APP_API_URL; // Asegúrate de tener la variable de entorno configurada
+
+  // Cargar los productos disponibles
+  axios
+    .get(`${apiUrl}/api/stock/stock`) // Usar la URL dinámica según el entorno
+    .then((response) => {
+      this.productos = response.data;
+    })
+    .catch((error) => {
+      console.error("Error al cargar los productos:", error);
+      alert("Hubo un problema al cargar los productos");
+    });
   },
 };
 
