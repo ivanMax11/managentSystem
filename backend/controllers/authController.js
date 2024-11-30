@@ -50,7 +50,7 @@ exports.loginUser = async (req, res) => {
     console.log("Contraseña verificada para el usuario:", email);
 
     // Generar el token JWT
-    const token = jwt.sign({ userId: user._id }, "secret", { expiresIn: "1h" });
+    const token = jwt.sign({ userId: user._id }, process.env.JWT_SECRET, { expiresIn: "1h" });
     console.log("Token generado:", token);
 
     res.json({ token, user: { email: user.email, id: user._id } });
