@@ -34,10 +34,10 @@
     created() {
       this.cargarClientes();
     },
-    
+
     methods: {
       async cargarClientes() {
-        const apiUrl = process.env.VUE_APP_API_URL;
+        const apiUrl = import.meta.env.VITE_APP_API_URL;
 
         try {       
           const response = await axios.get(`${apiUrl}api/clientes`);

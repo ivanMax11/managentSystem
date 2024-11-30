@@ -30,7 +30,7 @@
     methods: {
       async register() {
 
-    const apiUrl = process.env.VUE_APP_API_URL;
+        const apiUrl = import.meta.env.VITE_APP_API_URL;
 
   try {
     const response = await axios.post(`${apiUrl}/api/auth/register`, {

@@ -140,8 +140,8 @@ export default {
       proveedorDireccion: this.proveedorDireccion,
     };
 
-    
-    const apiUrl = process.env.VUE_APP_API_URL; 
+
+    const apiUrl = import.meta.env.VITE_APP_API_URL;
 
     // Realizar la solicitud POST para añadir el producto
     await axios.post(`${apiUrl}/api/stock/product`, productData);

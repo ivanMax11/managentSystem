@@ -48,6 +48,7 @@
 
 <script>
 import { mapActions } from 'vuex';
+import axios from 'axios';
 
 export default {
   data() {
@@ -60,32 +61,31 @@ export default {
   methods: {
     ...mapActions(['login']),
     async login() {
+      const apiUrl = import.meta.env.VITE_APP_API_URL;
 
-    const apiUrl = process.env.VUE_APP_API_URL;
+      try {
+        const response = await axios.post(`${apiUrl}/api/auth/login`, {
+          email: this.email,
+          password: this.password,
+        });
 
-  try {
-   
-    const response = await fetch(`${apiUrl}/api/auth/login`, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ email: this.email, password: this.password }),
-    });
-    const data = await response.json();
-
-    if (response.ok) {
-      // Guarda el token en el store
-      this.$store.dispatch('login', data.token);
-      this.$router.push({ name: 'Dashboard' }); // Redirige al dashboard
-    } else {
-      alert(data.message || 'Error al iniciar sesión');
-    }
-  } catch (error) {
-    alert('Error al conectarse al servidor');
-  }
-},
+        // Si la respuesta es exitosa
+        if (response.status === 200) {
+          // Guarda el token en el store
+          this.$store.dispatch('login', response.data.token);
+          this.$router.push({ name: 'Dashboard' }); // Redirige al dashboard
+        } else {
+          alert(response.data.message || 'Error al iniciar sesión');
+        }
+      } catch (error) {
+        console.error('Error al conectarse al servidor', error);
+        alert('Error al conectarse al servidor');
+      }
+    },
   },
 };
 </script>
+
 
 <style scoped>
 .container {

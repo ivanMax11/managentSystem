@@ -39,12 +39,12 @@
         product: null
       };
     },
-    
+
     methods: {
       async loadProduct() {
   const productId = this.$route.params.id;
 
-  const apiUrl = process.env.VUE_APP_API_URL; 
+  const apiUrl = import.meta.env.VITE_APP_API_URL;
 
   try {
     const response = await axios.get(`${apiUrl}/api/products/${productId}`); // Usar la URL dinámica

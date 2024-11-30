@@ -86,8 +86,8 @@ export default {
     const selectedProduct = ref(null);
     const additionalQuantity = ref(0);
     const loadProducts = async () => {
-      
-      const apiUrl = process.env.VUE_APP_API_URL;
+
+      const apiUrl = import.meta.env.VITE_APP_API_URL;
 
       try {
         const response = await axios.get(`${apiUrl}/api/stock/stock`);

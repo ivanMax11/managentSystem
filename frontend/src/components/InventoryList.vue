@@ -44,8 +44,8 @@ export default {
 
     // Función para cargar los artículos del inventario
     const loadInventoryItems = async () => {
-      
-      const apiUrl = process.env.VUE_APP_API_URL;
+
+      const apiUrl = import.meta.env.VITE_APP_API_URL;
 
       try {
         const response = await axios.get(`${apiUrl}/api/inventario/items`); // Ajusta la URL si es necesario

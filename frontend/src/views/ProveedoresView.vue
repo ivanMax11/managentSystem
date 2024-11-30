@@ -46,14 +46,14 @@
           console.error('Error al obtener proveedores:', error);
         }
       },
-      
+
       verDetalles(proveedor) {
         // Función para ver los detalles del proveedor, puedes redirigir o abrir un modal
         console.log(proveedor);
       },
       async eliminarProveedor(id) {
        
-        const apiUrl = process.env.VUE_APP_API_URL;
+        const apiUrl = import.meta.env.VITE_APP_API_URL;
 
         try {
           await axios.delete(`${apiUrl}/api/proveedores/${id}`); // Ruta para eliminar proveedor

@@ -192,7 +192,7 @@ export default {
     },
   },
   created() {
-  const apiUrl = process.env.VUE_APP_API_URL; // Asegúrate de tener la variable de entorno configurada
+    const apiUrl = import.meta.env.VITE_APP_API_URL;
 
   // Cargar los productos disponibles
   axios
