@@ -40,7 +40,7 @@
       async obtenerProveedores() {
         const apiUrl = import.meta.env.VITE_APP_API_URL;
         try {
-          const response = await axios.get(`${apiUrl}api/proveedores`); // Asegúrate de que esta ruta sea la correcta
+          const response = await axios.get(`${apiUrl}/api/proveedores`); // Asegúrate de que esta ruta sea la correcta
           this.proveedores = response.data;
         } catch (error) {
           console.error('Error al obtener proveedores:', error);

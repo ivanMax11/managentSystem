@@ -40,7 +40,7 @@
         const apiUrl = import.meta.env.VITE_APP_API_URL;
 
         try {       
-          const response = await axios.get(`${apiUrl}api/clientes`);
+          const response = await axios.get(`${apiUrl}/api/clientes`);
           this.clientes = response.data;
         } catch (error) {
           alert('Error al cargar la lista de clientes');
