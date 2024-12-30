@@ -23,6 +23,7 @@
               <td>{{ product.proveedor ? product.proveedor.nombre : 'Proveedor no disponible' }}</td>
               <td>
                 <button class="btn btn-info btn-sm" @click="openEditModal(product)">Gestionar</button>
+                <button class="btn btn-danger btn-sm ms-2" @click="deleteProduct(product._id)">Eliminar</button>
               </td>
             </tr>
           </tbody>
@@ -75,6 +76,7 @@
 </template>
 
 
+
 <script>
 import { ref, onMounted } from 'vue';
 import axios from 'axios';
@@ -85,17 +87,19 @@ export default {
     const products = ref([]);
     const selectedProduct = ref(null);
     const additionalQuantity = ref(0);
+
     const loadProducts = async () => {
+  const apiUrl = import.meta.env.VITE_APP_API_URL;
 
-      const apiUrl = import.meta.env.VITE_APP_API_URL;
+  try {
+    // Ahora agregamos el parámetro activo=true para filtrar solo productos activos
+    const response = await axios.get(`${apiUrl}/api/stock/stock?activo=true`);
+    products.value = response.data;
+  } catch (error) {
+    console.error('Error al cargar los productos:', error);
+  }
+};
 
-      try {
-        const response = await axios.get(`${apiUrl}/api/stock/stock`);
-        products.value = response.data;
-      } catch (error) {
-        console.error('Error al cargar los productos:', error);
-      }
-    };
 
     const formatCurrency = (value) => {
       if (value == null) return '';
@@ -112,23 +116,34 @@ export default {
     };
 
     const updateProduct = async () => {
-  try {
-    const updatedProduct = JSON.parse(JSON.stringify(selectedProduct.value));
-    if (additionalQuantity.value > 0) {
-      updatedProduct.cantidad += additionalQuantity.value;
-    }
+      try {
+        const updatedProduct = JSON.parse(JSON.stringify(selectedProduct.value));
+        if (additionalQuantity.value > 0) {
+          updatedProduct.cantidad += additionalQuantity.value;
+        }
 
-    const response = await axios.put(`http://localhost:5000/api/stock/product/${updatedProduct._id}`, updatedProduct);
-    console.log('Producto actualizado:', response.data);
+        const response = await axios.put(`http://localhost:5000/api/stock/product/${updatedProduct._id}`, updatedProduct);
+        console.log('Producto actualizado:', response.data);
 
-    await loadProducts();
-    closeEditModal();
-  } catch (error) {
-    console.error('Error al actualizar el producto:', error);
-  }
-};
+        await loadProducts();
+        closeEditModal();
+      } catch (error) {
+        console.error('Error al actualizar el producto:', error);
+      }
+    };
 
-
+    const deleteProduct = async (id) => {
+      if (confirm('¿Estás seguro de que deseas eliminar este producto?')) {
+        try {
+          const apiUrl = import.meta.env.VITE_APP_API_URL;
+          await axios.delete(`${apiUrl}/api/stock/product/${id}`);
+          console.log('Producto eliminado con éxito');
+          await loadProducts(); // Recargar la lista después de eliminar
+        } catch (error) {
+          console.error('Error al eliminar el producto:', error);
+        }
+      }
+    };
 
     onMounted(loadProducts);
 
@@ -140,12 +155,12 @@ export default {
       openEditModal,
       closeEditModal,
       updateProduct,
+      deleteProduct,
     };
   },
 };
-
-
 </script>
+
 
 <style scoped>
 .container {

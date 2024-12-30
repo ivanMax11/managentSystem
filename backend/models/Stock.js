@@ -5,7 +5,8 @@ const stockSchema = new mongoose.Schema({
   categoria: { type: String },
   precio: { type: Number, required: true },
   cantidad: { type: Number, required: true, default: 0 }, // Inicialmente en 0
-  proveedor: { type: mongoose.Schema.Types.ObjectId, ref: 'Proveedor', required: true } // Referencia al modelo Proveedor
+  proveedor: { type: mongoose.Schema.Types.ObjectId, ref: 'Proveedor', required: true }, // Referencia al modelo Proveedor
+  activo: { type: Boolean, default: true }, // Campo para soft delete
 });
 
 module.exports = mongoose.model('Stock', stockSchema);

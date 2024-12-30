@@ -39,5 +39,52 @@ const getInventoryItems = async (req, res) => {
   }
 };
 
+// Actualiar producto de inventario
+const actualizarProducto = async (req, res) => {
+  const { id } = req.params; // Obtener el ID del producto desde los parámetros de la URL
+  const datosActualizados = req.body; // Obtener los datos enviados desde el frontend
 
-module.exports = { addInventoryItem, getInventoryItems };
+  try {
+    // Buscar y actualizar el producto por ID
+    const productoActualizado = await Inventario.findByIdAndUpdate(
+      id,
+      datosActualizados,
+      { new: true } // Retorna el documento actualizado
+    );
+
+    if (!productoActualizado) {
+      return res.status(404).json({ mensaje: 'Producto no encontrado' });
+    }
+
+    res.status(200).json({
+      mensaje: 'Producto actualizado correctamente',
+      producto: productoActualizado,
+    });
+  } catch (error) {
+    console.error('Error al actualizar el producto:', error);
+    res.status(500).json({ mensaje: 'Error al actualizar el producto', error });
+  }
+};
+
+// Funcion para eliminar un producto
+const eliminarProducto = async (req, res) => {
+  const { id } = req.params;
+
+  try {
+    const productoEliminado = await Inventario.findByIdAndDelete(id);
+
+    if (!productoEliminado) {
+      return res.status(404).json({ mensaje: 'Producto no encontrado' });
+    }
+
+    res.status(200).json({
+      mensaje: 'Producto eliminado corerrectamente',
+      producto: productoEliminado,
+    });
+  } catch (error) {
+    console.error('Error al eliminar el producto:', error);
+    res.status(500).json({ mensaje: 'Error al eliminar el producto', error });
+  }
+};
+
+module.exports = { addInventoryItem, getInventoryItems, actualizarProducto, eliminarProducto };

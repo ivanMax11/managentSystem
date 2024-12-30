@@ -18,7 +18,7 @@ async function registrarVenta(req, res) {
       return res.status(400).json({ message: 'Faltan datos obligatorios para registrar la venta' });
     }
 
-    // Verificar existencia de productos en el carrito y validar stock
+    // Verificar existencia de productos en el carrito y validar stock de productos activos
     for (let item of carrito) {
       const { productoId, cantidad } = item;
       
@@ -26,10 +26,10 @@ async function registrarVenta(req, res) {
         throw new Error('Faltan datos de producto en el carrito');
       }
 
-      // Buscar el producto
-      const producto = await Stock.findById(productoId).populate('proveedor').session(session);
+      // Buscar el producto y asegurarse de que esté activo
+      const producto = await Stock.findOne({ _id: productoId, activo: true }).populate('proveedor').session(session);
       if (!producto) {
-        throw new Error('Producto no encontrado');
+        throw new Error(`Producto no disponible para la venta o inactivo: ${productoId}`);
       }
 
       // Validar stock disponible
@@ -80,6 +80,7 @@ async function registrarVenta(req, res) {
 
 
 
+
 // Función para obtener el historial de ventas con filtros de fecha
 async function obtenerVentas(req, res) {
   const { startDate, endDate } = req.query;
@@ -96,7 +97,7 @@ async function obtenerVentas(req, res) {
 
     console.log('Consulta generada:', query); // Log para verificar el filtro
 
-    // Buscar ventas con el filtro de fecha y poblar los productos y cliente
+    // Buscar ventas con el filtro de fecha y poblar los productos
     const ventas = await Venta.find(query)
       .populate({
         path: 'productos.producto', // Poblar el campo producto dentro del arreglo productos
@@ -106,14 +107,14 @@ async function obtenerVentas(req, res) {
 
     console.log('Ventas encontradas:', ventas); // Log para verificar los datos
 
-    // Modificar el formato de la respuesta para separar cantidad y nombre
+    // Modificar el formato de la respuesta para manejar referencias eliminadas
     const ventasFormateadas = ventas.map(venta => {
       return {
         ...venta.toObject(),
         productos: venta.productos.map(p => ({
-          nombre: p.producto.nombre,
-          cantidad: p.cantidad
-        }))
+          nombre: p.producto ? p.producto.nombre : 'Producto eliminado', // Manejo de referencias nulas
+          cantidad: p.cantidad,
+        })),
       };
     });
 

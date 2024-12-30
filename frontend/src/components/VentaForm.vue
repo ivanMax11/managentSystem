@@ -142,12 +142,14 @@ export default {
   },
   methods: {
     async cargarProductos() {
-
       const apiUrl = import.meta.env.VITE_APP_API_URL;
 
-      try {    
-        const response = await axios.get(`${apiUrl}/api/stock/stock`);
-        this.productos = response.data;
+      try {
+        // Llamamos a la API para obtener todos los productos (con o sin stock)
+        const response = await axios.get(`${apiUrl}/api/stock/stock?activo=true`);
+        
+        // Filtramos solo los productos que tienen stock disponible
+        this.productos = response.data.filter(producto => producto.cantidad > 0);
       } catch (error) {
         this.mostrarMensaje('Error al cargar los productos', 'danger');
       }
@@ -180,44 +182,42 @@ export default {
     },
 
     async registrarVenta() {
-  if (!this.carrito.length) {
-    return this.mostrarMensaje('El carrito está vacío', 'danger');
-  }
+      if (!this.carrito.length) {
+        return this.mostrarMensaje('El carrito está vacío', 'danger');
+      }
 
-  try {
-    const ventaData = {
-  carrito: this.carrito.map(item => ({
-    productoId: item.producto._id, // ID del producto
-    cantidad: item.cantidad,       // Cantidad vendida
-  })),
-  cliente: this.cliente,           // Nombre del cliente
-  cuit: this.cuit,                 // CUIT del cliente
-  email: this.email,               // Correo del cliente
-  telefono: this.telefono,         // Teléfono del cliente
-  fecha: this.fecha,               // Fecha de la venta
-  total: this.totalVenta           // Total de la venta
-};
+      try {
+        const ventaData = {
+          carrito: this.carrito.map(item => ({
+            productoId: item.producto._id, // ID del producto
+            cantidad: item.cantidad,       // Cantidad vendida
+          })),
+          cliente: this.cliente,           // Nombre del cliente
+          cuit: this.cuit,                 // CUIT del cliente
+          email: this.email,               // Correo del cliente
+          telefono: this.telefono,         // Teléfono del cliente
+          fecha: this.fecha,               // Fecha de la venta
+          total: this.totalVenta           // Total de la venta
+        };
 
+        console.log('Datos enviados al backend:', ventaData); // Depuración
+        const apiUrl = import.meta.env.VITE_APP_API_URL;
 
-    console.log('Datos enviados al backend:', ventaData); // Depuración
-    const apiUrl = process.env.VUE_APP_API_URL;
+        const response = await axios.post(`${apiUrl}/api/ventas/venta`, ventaData);
 
-    const response = await axios.post(`${apiUrl}/api/ventas/venta`, ventaData);
-
-    if (response.status === 201) {
-      this.mostrarMensaje('Venta registrada con éxito', 'success');
-      this.carrito = [];
-      this.limpiarFormulario();
-    } else {
-      this.mostrarMensaje('Error al registrar la venta', 'danger');
-    }
-  } catch (error) {
-    const mensaje = error.response?.data?.message || 'Error al registrar la venta';
-    console.error('Error del servidor:', error.response?.data);
-    this.mostrarMensaje(mensaje, 'danger');
-  }
-},
-
+        if (response.status === 201) {
+          this.mostrarMensaje('Venta registrada con éxito', 'success');
+          this.carrito = [];
+          this.limpiarFormulario();
+        } else {
+          this.mostrarMensaje('Error al registrar la venta', 'danger');
+        }
+      } catch (error) {
+        const mensaje = error.response?.data?.message || 'Error al registrar la venta';
+        console.error('Error del servidor:', error.response?.data);
+        this.mostrarMensaje(mensaje, 'danger');
+      }
+    },
 
     mostrarMensaje(mensaje, tipo) {
       this.mensaje = mensaje;
@@ -242,7 +242,13 @@ export default {
 };
 </script>
 
+
 <style scoped>
+
+.container {
+  margin-bottom: 100px;
+}
+
 .dashboard-container {
   margin-top: 100px;
   /* Espacio desde el header */

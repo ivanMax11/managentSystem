@@ -39,25 +39,7 @@ const addProduct = async (req, res) => {
 
 module.exports = { addProduct };
 
-
-
-// Obtener el stock actual
-const getStock = async (req, res) => {
-  try {
-    console.log('Obteniendo inventario...'); // Log para depuración
-    const products = await Stock.find()
-      .populate('proveedor', 'nombre') // Popula el campo proveedor con el nombre
-      .select('nombre categoria precio cantidad proveedor'); // Selecciona los campos que necesitas
-    console.log('Productos encontrados:', products); // Log para verificar los datos
-    res.json(products);
-  } catch (error) {
-    console.error('Error al obtener el inventario:', error); // Log para el error
-    res.status(500).json({ message: 'Error al obtener el inventario', error });
-  }
-};
-
-
-    
+  
 const updateProduct = async (req, res) => {
   const { id } = req.params;
 
@@ -77,5 +59,46 @@ const updateProduct = async (req, res) => {
 };
 
 
+const eliminarProducto = async (req, res) => {
+  const { id } = req.params; // ID extraído de la URL
+  try {
+    // Actualizar el campo activo a false
+    const productoEliminado = await Stock.findByIdAndUpdate(
+      id,
+      { activo: false },
+      { new: true } // Retornar el documento actualizado
+    );
 
-module.exports = { addProduct, getStock, updateProduct};
+    if (!productoEliminado) {
+      return res.status(404).json({ mensaje: 'Producto no encontrado' });
+    }
+
+    res.status(200).json({ mensaje: 'Producto eliminado exitosamente', producto: productoEliminado });
+  } catch (error) {
+    console.error('Error al eliminar el producto:', error);
+    res.status(500).json({ mensaje: 'Error al intentar eliminar el producto' });
+  }
+};
+
+
+const obtenerProductos = async (req, res) => {
+  const { activo } = req.query; // Obtener el parámetro activo de la consulta (si se proporciona)
+
+  // Definir el filtro basado en el parámetro 'activo'
+  const filtro = activo ? { activo: activo === 'true' } : {}; // Si 'activo=true', busca productos activos, si no, todos los productos.
+
+  try {
+    const productos = await Stock.find(filtro)  // Aplicar el filtro
+      .populate('proveedor', 'nombre') // Poblar el campo proveedor con el nombre
+      .select('nombre categoria precio cantidad proveedor activo'); // Seleccionar los campos necesarios
+
+    res.status(200).json(productos); // Responder con los productos encontrados
+  } catch (error) {
+    console.error('Error al obtener los productos:', error); // Log para errores
+    res.status(500).json({ mensaje: 'Error al obtener los productos', error });
+  }
+};
+
+
+
+module.exports = { addProduct, updateProduct, eliminarProducto, obtenerProductos };
